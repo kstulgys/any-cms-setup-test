@@ -3,6 +3,8 @@ import styles from './page.module.css';
 import { collections } from '../../cms/config';
 import React from 'react';
 import { z } from 'zod';
+import { marked } from 'marked';
+import matter from 'gray-matter';
 
 const fetchBlogPost = async (owner = 'kstulgys', repo = 'any-cms-setup-test', path = 'cms/blog/hello-blog-1.md') => {
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
@@ -10,8 +12,13 @@ const fetchBlogPost = async (owner = 'kstulgys', repo = 'any-cms-setup-test', pa
 
   if (response.ok) {
     const data = await response.json();
-    const content = Buffer.from(data.content, 'base64'); // Decode base64-encoded content
-    return content;
+    const markdownContent = Buffer.from(data.content, 'base64');
+    const parsedData = matter(markdownContent);
+
+    // const content = atob(data.content); // Decode base64-encoded content
+    // const parsedContent = marked.parse(content);
+
+    return parsedData;
   } else {
     throw new Error('Failed to fetch blog post');
   }
@@ -34,6 +41,17 @@ const fetchBlogPost = async (owner = 'kstulgys', repo = 'any-cms-setup-test', pa
 const DynamicForm = ({ schema }) => {
   const [formData, setFormData] = React.useState({});
   const [errors, setErrors] = React.useState({});
+
+  React.useEffect(() => {
+    fetchBlogPost()
+      .then((res) => {
+        console.log({ res });
+        // Process the content as needed
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const handleChange = (event) => {
     setFormData({
