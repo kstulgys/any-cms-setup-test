@@ -1,0 +1,42 @@
+[
+  {
+    "name": "John",
+    "portfolio": "https://google.com"
+  },
+  {
+    "name": "Jane",
+    "portfolio": "https://example.com"
+  },
+  {
+    "name": "David",
+    "portfolio": "https://openai.com"
+  },
+  {
+    "name": "Emily",
+    "portfolio": "https://github.com"
+  },
+  {
+    "name": "Michael",
+    "portfolio": "https://stackoverflow.com"
+  },
+  {
+    "name": "Sarah",
+    "portfolio": "https://amazon.com"
+  },
+  {
+    "name": "Robert",
+    "portfolio": "https://linkedin.com"
+  },
+  {
+    "name": "Emma",
+    "portfolio": "https://twitter.com"
+  },
+  {
+    "name": "William",
+    "portfolio": "https://youtube.com"
+  },
+  {
+    "name": "Olivia",
+    "portfolio": "https://facebook.com"
+  }
+]
