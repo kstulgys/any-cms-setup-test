@@ -5,8 +5,8 @@ const blog = collection({
   type: 'content',
   fields: object({
     title: text({ label: 'Title' }),
-    body: markdown({ label: 'Title' }),
-    author: ref({ label: 'authors', collection: 'authors' }),
+    body: markdown({ label: 'Body' }),
+    author: ref({ label: 'Authors', collection: 'authors' }),
     relatedPosts: ref({ label: 'Related posts', collection: 'blog' }),
   }),
 });
@@ -28,4 +28,13 @@ const portfolio = collection({
   }),
 });
 
-export const schema = createSchema({ authors, blog });
+const pages = collection({
+  label: 'Pages',
+  type: 'data',
+  fields: object({
+    name: text({ label: 'Name' }),
+    heading: text({ label: 'Heading' }),
+  }),
+});
+
+export const schema = createSchema({ authors, blog, portfolio, pages });
