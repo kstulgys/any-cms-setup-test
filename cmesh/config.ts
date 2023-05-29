@@ -1,40 +1,44 @@
-import { collection, object, text, markdown, ref, url, createSchema } from 'cms-admin';
+import { document, collection, f, createSchema } from 'cms-admin';
 
-const blog = collection({
-  label: 'Blog',
-  type: 'content',
-  fields: object({
-    title: text({ label: 'Title' }),
-    body: markdown({ label: 'Body' }),
-    author: ref({ label: 'Authors', collection: 'authors' }),
-    relatedPosts: ref({ label: 'Related posts', collection: 'blog' }),
-  }),
-});
-
-const authors = collection({
-  label: 'Authors',
-  type: 'data',
-  fields: object({
-    name: text({ label: 'Name' }),
-    portfolio: url({ label: 'Portfolio' }),
-  }),
-});
-
-const portfolio = collection({
-  label: 'Portfolio',
-  type: 'data',
-  fields: object({
-    author: ref({ label: 'Authors', collection: 'authors' }),
+const blogs = collection({
+  label: 'Blogs',
+  format: 'md', // will be multiple files i.e content/collection/blogs/*.md
+  fields: f.object({
+    title: f.text({ label: 'Title' }),
+    isDraft: f.toggle({ label: 'Draft' }),
+    author: f.select({ label: 'Authors', document: 'authors', multiple: true }),
+    relatedPosts: f.select({ label: 'Related posts', collection: 'blogs' }),
+    tags: f.checkbox({ label: 'Tags', document: 'tags' }),
+    body: f.markdown({ label: 'Body' }),
   }),
 });
 
 const pages = collection({
   label: 'Pages',
-  type: 'data',
-  fields: object({
-    name: text({ label: 'Name' }),
-    heading: text({ label: 'Heading' }),
+  format: 'md', // will be multiple files i.e content/collection/pages/*.md
+  fields: f.object({
+    slug: f.slug({ label: 'Slug' }),
+    name: f.text({ label: 'Name' }),
+    heading: f.text({ label: 'Heading' }),
+    body: f.markdown({ label: 'Body' }),
   }),
 });
 
-export const schema = createSchema({ authors, blog, portfolio, pages });
+const authors = document({
+  format: 'json', // will be single file i.e content/document/tags.json
+  label: 'Authors',
+  fields: f.object({
+    name: f.text({ label: 'Name' }),
+    portfolio: f.url({ label: 'Portfolio' }),
+  }),
+});
+
+const tags = document({
+  format: 'json', // will be single file i.e content/document/tags.json
+  label: 'Tags',
+  fields: f.object({
+    name: f.text({ label: 'Name' }),
+  }),
+});
+
+export const schema = createSchema({ authors, blogs, pages, tags });
