@@ -17,8 +17,8 @@ const pages = collection({
   label: 'Pages',
   format: 'md', // will be multiple files i.e content/collection/pages/*.md
   fields: f.object({
-    slug: f.slug({ label: 'Slug' }),
     name: f.text({ label: 'Name' }),
+    slug: f.slug({ label: 'Slug' }),
     heading: f.text({ label: 'Heading' }),
     body: f.markdown({ label: 'Body' }),
   }),
