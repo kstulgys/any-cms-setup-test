@@ -2,8 +2,8 @@ import { document, collection, f, createSchema } from 'cms-admin';
 
 const blogs = collection({
   label: 'Blogs',
-  format: 'md', // will be multiple files i.e content/collection/blogs/*.md
-  fields: f.object({
+  type: 'content', // will be multiple files i.e content/collection/blogs/*.md
+  fields: f.fields({
     title: f.text({ label: 'Title' }),
     isDraft: f.toggle({ label: 'Draft' }),
     author: f.select({ label: 'Authors', document: 'authors', multiple: true }),
@@ -13,32 +13,97 @@ const blogs = collection({
   }),
 });
 
-const pages = collection({
-  label: 'Pages',
-  format: 'md', // will be multiple files i.e content/collection/pages/*.md
-  fields: f.object({
-    name: f.text({ label: 'Name' }),
-    slug: f.slug({ label: 'Slug' }),
-    heading: f.text({ label: 'Heading' }),
-    body: f.markdown({ label: 'Body' }),
-  }),
-});
-
-const authors = document({
-  format: 'json', // will be single file i.e content/document/tags.json
+const authors = collection({
   label: 'Authors',
-  fields: f.object({
+  type: 'data', // will be single file i.e content/document/authors.json
+  fields: f.fields({
     name: f.text({ label: 'Name' }),
     portfolio: f.url({ label: 'Portfolio' }),
   }),
 });
 
-const tags = document({
-  format: 'json', // will be single file i.e content/document/tags.json
+const tags = collection({
   label: 'Tags',
-  fields: f.object({
+  type: 'data', // will be single file i.e content/document/tags.json
+  fields: f.fields({
     name: f.text({ label: 'Name' }),
   }),
 });
 
-export const schema = createSchema({ authors, blogs, pages, tags });
+const portfolios = collection({
+  label: 'Portfolio',
+  type: 'data', // will be single file i.e content/document/authors.json
+  fields: f.fields({
+    name: f.text({ label: 'Name' }),
+    url: f.url({ label: 'Url' }),
+  }),
+});
+
+// will be single file i.e content/collection/pages/home.json
+const home = document({
+  label: 'Home Page',
+  type: 'data', // will be raw .json object. If collection then will be .md file with gray-matter
+  fields: f.fields({
+    headline: f.text({ label: 'Headline' }),
+    description: f.url({ label: 'Description' }),
+    services: f.fieldset({
+      label: 'Services',
+      fields: f.fields({
+        name: f.text({ label: 'Name' }),
+        description: f.description({ label: 'Description' }),
+      }),
+    }),
+    portfolio: f.select({
+      label: 'Portfolio',
+      collection: 'portfolios',
+      multiple: true,
+    }),
+  }),
+});
+
+const about = document({
+  label: 'About Page',
+  type: 'data', // will be raw .json object. If collection then will be .md file with gray-matter
+  fields: f.fields({
+    headline: f.text({ label: 'Headline' }),
+    description: f.url({ label: 'Description' }),
+    services: f.fieldset({
+      label: 'Services',
+      fields: f.fields({
+        name: f.text({ label: 'Name' }),
+        description: f.description({ label: 'Description' }),
+      }),
+    }),
+    portfolio: f.select({
+      label: 'Portfolio',
+      collection: 'portfolios',
+      multiple: true,
+    }),
+  }),
+});
+
+const settings = document({
+  label: 'Setting Page',
+  type: 'data', // will be raw .json object. If collection then will be .md file with gray-matter
+  fields: f.fields({
+    theme: f.text({ label: 'Theme' }),
+  }),
+});
+
+const pages = collection({
+  label: 'Pages',
+  fields: f.fields({
+    // common fields for every document
+    seo: f.fieldset({
+      label: 'SEO',
+      fields: f.fields({
+        name: f.text({ label: 'Name' }),
+        description: f.description({ label: 'Description' }),
+      }),
+    }),
+    slug: f.slug({ label: 'Slug' }),
+  }),
+  documents: [home, about, settings],
+});
+
+export const schema = createSchema({ authors, blogs, pages, tags, portfolios, settings });
